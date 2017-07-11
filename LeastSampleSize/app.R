@@ -105,7 +105,7 @@ server <- function(input, output) {
         pv=as.numeric(shapiro.test(cqd)[2])
         n=n+1
       }
-      hist((cqd-mean(cqd))/sd(cqd),freq=F,main=paste("COefficient of Quartile Deviation\nn=",n))
+      hist((cqd-mean(cqd))/sd(cqd),freq=F,main=paste("Coefficient of Quartile Deviation\nn=",n))
       curve(dnorm,add=T)
     }
     #Bowleys measure of Skewness
