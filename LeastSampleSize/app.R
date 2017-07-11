@@ -18,7 +18,7 @@ ui <- fluidPage(
     #Sidebar Panel
     sidebarPanel(
       selectInput("Dist", "Select the Distribution", choice = c("Exponential (rate = m)" = 1, "LogNormal" = 2, "Cauchy" = 3, "Normal" = 4, "Beta" = 5, "Uniform" = 6), selected = "Exponential"),
-      selectInput("QM", "Select the Quantile Measure", choice = c("Median" = 1, "Quartile Deviation" = 2, "Coefficient of Quartile Deviation" = 3, "Bowley Measure of Skewness" = 4, "Percentile Measure of Kurtosis" = 5), selected = "Median"),
+      selectInput("QM", "Select the Quantile Measure", choice = c("Median" = 1, "Quantile Deviation" = 2, "Coefficient of Quartile Deviation" = 3, "Bowley Measure of Skewness" = 4, "Percentile Measure of Kurtosis" = 5), selected = "Median"),
       conditionalPanel(  condition = "input.Dist == '1'",
                          numericInput("k", "State the parameter m of Exponential Distribution",value = 1)),
       conditionalPanel(  condition = "input.Dist == '5'",
@@ -31,9 +31,12 @@ ui <- fluidPage(
       h4("Powered By "),img(src = 'R.png', height='50px',width='50px')
     ),
     #Main Panel
-    mainPanel(h4("Graphs for Different Quantile Measures", align = "center"), 
-              plotOutput("plot"),
-              textOutput("dnc")
+    mainPanel(h4("Graphs for Different Quantile Measures", align = "center"),
+              tags$style(type="text/css",
+                         ".shiny-output-error { visibility: hidden; }"),
+              textOutput("dnc"),
+              plotOutput("plot")
+
               
     )
   )
@@ -64,7 +67,7 @@ server <- function(input, output) {
         pv=as.numeric(shapiro.test(med)[2])
         n=n+1
       }
-      hist((med-mean(med))/sd(med),freq=F,main=paste("Median,n=",n-1))
+      hist((med-mean(med))/sd(med),freq=F,main=paste("Median\nn=",n))
       curve(dnorm,add=T)
     }
     #Quantile Deviation
@@ -84,7 +87,7 @@ server <- function(input, output) {
         pv=as.numeric(shapiro.test(qd)[2])
         n=n+1
       }
-      hist((qd-mean(qd))/sd(qd),freq=F,main=paste("QD,n=",n))
+      hist((qd-mean(qd))/sd(qd),freq=F,main=paste("Quantile Deviation\nn=",n))
       curve(dnorm,add=T)
     }
     #Coeffcient of Quantile Deviation
@@ -102,7 +105,7 @@ server <- function(input, output) {
         pv=as.numeric(shapiro.test(cqd)[2])
         n=n+1
       }
-      hist((cqd-mean(cqd))/sd(cqd),freq=F,main=paste("CQD,n=",n))
+      hist((cqd-mean(cqd))/sd(cqd),freq=F,main=paste("COefficient of Quartile Deviation\nn=",n))
       curve(dnorm,add=T)
     }
     #Bowleys measure of Skewness
@@ -148,7 +151,7 @@ server <- function(input, output) {
         pv=as.numeric(shapiro.test(sk)[2])
         n = n+1
       }
-      hist((sk-mean(sk))/sd(sk),freq=F,main=paste("SK,n=",n))
+      hist((sk-mean(sk))/sd(sk),freq=F,main=paste("Bowleys Measure of Skewness\nn=",n))
       curve(dnorm,add=T)
     }
     #Percentile Measure of Skewness
@@ -194,7 +197,7 @@ server <- function(input, output) {
         pv=as.numeric(shapiro.test(kp)[2])
         n = n+1
       }
-      hist((kp-mean(kp))/sd(kp),freq=F,main=paste("KP,n=",n))
+      hist((kp-mean(kp))/sd(kp),freq=F,main=paste("Percentile Measure of Kurtosis\nn=",n))
       curve(dnorm,add=T)
     }
   })
